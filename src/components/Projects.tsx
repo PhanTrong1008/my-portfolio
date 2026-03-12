@@ -1,4 +1,9 @@
 import { useScrollAnimationMultiple } from '../hooks/useScrollAnimation'
+import { logoMap } from './Skills'
+import imgKompact from '../assets/images/project_kompact.jpg'
+import imgRestaff from '../assets/images/project_restaff.jpg'
+import imgTimes from '../assets/images/project_times.jpg'
+import imgTinher from '../assets/images/project_tinher.jpg'
 
 const projects = [
   {
@@ -15,7 +20,7 @@ const projects = [
       'Collaborated closely with Business Analysts, Designer, and Engineers to analyze requirements, estimate tasks, and deliver features on schedule following Agile practices',
     ],
     technologies: ['Vue JS', 'Express JS', 'MongoDB'],
-    image: '../src/assets/images/project_kompact.jpg',
+    image: imgKompact,
   },
   {
     title: 'Jupiter - Restaff',
@@ -31,7 +36,7 @@ const projects = [
       'Developed RESTful APIs using DotNet',
     ],
     technologies: ['Angular', 'NgRx', 'NgPrime', 'SCSS', 'C#', '.NET', 'Microsoft SQL Server'],
-    image: '../src/assets/images/project_restaff.jpg',
+    image: imgRestaff,
   },
   {
     title: 'Times – Jobframe',
@@ -48,7 +53,7 @@ const projects = [
       'Developed RESTful APIs using Express.js and Node.js',
     ],
     technologies: ['Angular', 'RxJS', 'SCSS', 'Express JS', 'Gremlin', 'Redis', 'JanusGraph'],
-    image: '../src/assets/images/project_times.jpg',
+    image: imgTimes,
   },
   {
     title: 'Dating App',
@@ -65,7 +70,7 @@ const projects = [
       'Collaborated closely with front-end developers to integrate back-end APIs, ensuring a seamless user experience',
     ],
     technologies: ['Next JS', 'SCSS', 'Nest JS', 'TypeORM', 'Tailwind CSS', 'Ant Design', 'React', 'Redux', 'PostgreSQL', 'Cloudinary'],
-    image: '../src/assets/images/project_tinher.jpg',
+    image: imgTinher,
   },
 ]
 
@@ -157,7 +162,11 @@ function TechTags({ technologies }: { technologies: string[] }) {
       <div className="flex flex-wrap gap-4 max-md:gap-2">
         {technologies.map((tech) => (
           <div key={tech} className="flex items-center gap-1 border border-gray-tag rounded-lg p-2">
-            <div className="w-6 h-6 bg-gray-100 rounded" />
+            {logoMap[tech] ? (
+              <img src={logoMap[tech]} alt={tech} className="w-6 h-6 object-contain" />
+            ) : (
+              <div className="w-6 h-6 bg-gray-100 rounded" />
+            )}
             <span className="text-sm font-medium text-text-light leading-[22px]">{tech}</span>
           </div>
         ))}

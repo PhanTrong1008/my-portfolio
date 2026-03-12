@@ -1,5 +1,7 @@
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
 import { FollowMe } from './Footer'
+import avatarImg from '../assets/images/avatar_portfolio.png'
+import cvFile from '../assets/PhanNguyenDucTrong_CV.pdf'
 
 export default function About() {
   const sectionRef = useScrollAnimation()
@@ -75,7 +77,7 @@ export default function About() {
           <div className="flex-1 max-w-[665px] max-md:w-full flex flex-col items-center justify-center pl-20 max-md:pl-0 py-10 gap-6">
             <div className="relative w-full aspect-square max-w-[475px]">
               <img
-                src="/src/assets/images/avatar_portfolio.png"
+                src={avatarImg}
                 alt="Trong Phan"
                 className="w-full h-full object-contain rounded-lg"
                 onError={(e) => {
@@ -98,12 +100,12 @@ export default function About() {
                 </svg>
                 Contact Me
               </a>
-              <a href="#" className="flex-1 border border-primary rounded px-6 py-3 flex items-center justify-center gap-2 leading-6">
+              {/* <a href={cvFile} download="PhanNguyenDucTrong_CV.pdf" className="flex-1 border border-primary rounded px-6 py-3 flex items-center justify-center gap-2 leading-6">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20">
                   <path d="M10 3.75V12.5M10 12.5L6.875 9.375M10 12.5L13.125 9.375M5 16.25H15" stroke="#5475e5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
                 <span className="gradient-text font-medium">My Resumé</span>
-              </a>
+              </a> */}
             </div>
 
             <FollowMe />

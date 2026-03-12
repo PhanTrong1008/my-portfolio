@@ -1,10 +1,14 @@
 import { FollowMe } from './Footer'
 import { TechTag } from './Skills'
+import cvFile from '../assets/PhanNguyenDucTrong_CV.pdf'
+import logoJs from '../assets/images/logo_js.png'
+import logoTs from '../assets/images/logo_ts.png'
+import logoAngular from '../assets/images/logo_angular.png'
 
 const techTags = [
-  { name: 'Javascript', imageSrc: '../src/assets/images/logo_js.png' },
-  { name: 'Typescript', imageSrc: '../src/assets/images/logo_ts.png' },
-  { name: 'Angular', imageSrc: '../src/assets/images/logo_angular.png' },
+  { name: 'Javascript', imageSrc: logoJs },
+  { name: 'Typescript', imageSrc: logoTs },
+  { name: 'Angular', imageSrc: logoAngular },
 ]
 
 export default function Hero() {
@@ -66,7 +70,7 @@ export default function Hero() {
               </svg>
               Get Started
             </a>
-            <a href="#" className="border border-primary rounded px-6 py-3 flex items-center gap-2 leading-6">
+            <a href={cvFile} download="PhanNguyenDucTrong_CV.pdf" className="border border-primary rounded px-6 py-3 flex items-center gap-2 leading-6">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20">
                 <path d="M10 3.75V12.5M10 12.5L6.875 9.375M10 12.5L13.125 9.375M5 16.25H15" stroke="#5475e5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>

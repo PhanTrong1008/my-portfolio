@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import cvFile from '../assets/PhanNguyenDucTrong_CV.pdf'
 
 const navLinks = [
   { label: 'About', href: '#about' },
@@ -45,7 +46,8 @@ export default function Navbar() {
         </div>
 
         <a
-          href="#"
+          href={cvFile}
+          download="PhanNguyenDucTrong_CV.pdf"
           className="inline-flex items-center gap-2 px-6 py-3 rounded border border-primary"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20">

@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import cvFile from '../assets/PhanNguyenDucTrong_CV.pdf'
 
 export default function MobileNavbar() {
   return (
@@ -23,7 +24,8 @@ export default function MobileNavbar() {
           <p className="font-semibold leading-[40px] shrink-0 text-[#111928] text-[28px] whitespace-nowrap">.Portfolio</p>
 
           <a
-            href="#"
+            href={cvFile}
+            download="PhanNguyenDucTrong_CV.pdf"
             className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded border border-primary"
           >
             <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 20 20">
