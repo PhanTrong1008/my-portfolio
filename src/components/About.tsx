@@ -1,7 +1,7 @@
 import { useScrollAnimation } from '../hooks/useScrollAnimation'
 import { FollowMe } from './Footer'
 import avatarImg from '../assets/images/avatar_portfolio.png'
-import cvFile from '../assets/PhanNguyenDucTrong_CV.pdf'
+// import cvFile from '../assets/PhanNguyenDucTrong_CV.pdf'
 
 export default function About() {
   const sectionRef = useScrollAnimation()
