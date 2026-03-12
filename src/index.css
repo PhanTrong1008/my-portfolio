@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #5475e5;
+  --color-primary-dark: #1c3fb7;
+  --color-primary-mid: #2662d9;
+  --color-dark: #111928;
+  --color-dark-secondary: #1a1a2e;
+  --color-gray-light: rgba(243, 244, 246, 0.3);
+  --color-gray-border: #dfe4ea;
+  --color-gray-tag: #e5e7eb;
+  --color-text: #111928;
+  --color-text-body: #637381;
+  --color-text-muted: #8899a8;
+  --color-text-light: #9ca3af;
+  --color-text-gray: #6b7280;
+  --color-accent: #f27430;
+  --color-green: #2cd673;
+  --font-sans: 'Inter', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+html::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  overflow-x: hidden;
+  background: white;
+}
+
+.gradient-text {
+  background: linear-gradient(110deg, #5475e5, #1c3fb7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-bg {
+  background: linear-gradient(110deg, #5475e5, #1c3fb7);
+}
+
+.bg-text-watermark {
+  background: linear-gradient(to bottom, #f0f0f0, white 90%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  opacity: 0.8;
+}
+
+/* Scroll animation classes */
+.fade-in-section {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-in-left {
+  opacity: 0;
+  transform: translateX(-60px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-left.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.fade-in-right {
+  opacity: 0;
+  transform: translateX(60px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.fade-in-right.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scale-in {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.scale-in.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Tag hover animation */
+.tag-hover {
+  transition: all 200ms ease-out;
+}
+
+.tag-hover:hover {
+  transform: rotate(5deg) translateY(-5px);
+  background: linear-gradient(#f0f5ff, #f0f5ff) padding-box,
+              linear-gradient(96.3deg, #5475E5 0%, #1C3FB7 100%) border-box;
+  border-color: transparent;
+}
