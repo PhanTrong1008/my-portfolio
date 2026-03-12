@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import cvFile from '../assets/PhanNguyenDucTrong_CV.pdf'
+import logoFull from '../assets/images/logo_full.png';
 
 const navLinks = [
   { label: 'About', href: '#about' },
@@ -25,12 +26,9 @@ export default function Navbar() {
     >
       <div className="max-w-[1440px] mx-auto px-[135px] max-xl:px-16 max-lg:px-6 py-6 flex items-center justify-between">
         <a href="#" className="flex items-center gap-1">
-          <span className="bg-dark text-white text-lg px-2 py-1.5 rounded-lg shadow-[0_4px_12px_rgba(13,10,44,0.06)] hidden lg:flex items-center gap-1 leading-[26px]">
-            <span className="font-normal">&lt;/</span>
-            <span className="font-semibold">Dev</span>
-            <span className="font-normal">&gt;</span>
-          </span>
-          <span className="text-[28px] font-semibold text-dark leading-[40px]">.Portfolio</span>
+          <div className="h-[56px] relative shrink-0 w-[37.07px]" data-name="logo 2">
+              <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={logoFull} />
+            </div>
         </a>
 
         <div className="flex items-center gap-4">

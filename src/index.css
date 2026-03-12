@@ -44,14 +44,14 @@ body {
 }
 
 .gradient-text {
-  background: linear-gradient(110deg, #5475e5, #1c3fb7);
+  background: linear-gradient(90deg, #06B5D5 0%, #3487F4 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .gradient-bg {
-  background: linear-gradient(110deg, #5475e5, #1c3fb7);
+  background: linear-gradient(90deg, #06B5D5 0%, #3487F4 100%);
 }
 
 .bg-text-watermark {
@@ -115,7 +115,7 @@ body {
 .tag-hover:hover {
   transform: rotate(5deg) translateY(-5px);
   background: linear-gradient(#f0f5ff, #f0f5ff) padding-box,
-              linear-gradient(96.3deg, #5475E5 0%, #1C3FB7 100%) border-box;
+              linear-gradient(90deg, #06B5D5 0%, #3487F4 100%) border-box;
   border-color: transparent;
 }
 
@@ -125,7 +125,7 @@ body {
 }
 
 .group:hover .skill-card-title {
-  background: linear-gradient(130deg, #5475e5 0%, #1c3fb7 100%);
+  background: linear-gradient(90deg, #06B5D5 0%, #3487F4 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
