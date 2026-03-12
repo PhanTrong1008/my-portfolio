@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import cvFile from '../assets/PhanNguyenDucTrong_CV.pdf'
-import logoFull from '../assets/images/logo_full.png';
+import logoTP from '../../public/tp_logo.png';
 
 const navLinks = [
   { label: 'About', href: '#about' },
@@ -20,15 +20,17 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white ${
-        scrolled ? 'shadow-[0_1px_0_#dfe4ea]' : 'border-b border-gray-border'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white ${scrolled ? 'shadow-[0_1px_0_#dfe4ea]' : 'border-b border-gray-border'
+        }`}
     >
       <div className="max-w-[1440px] mx-auto px-[135px] max-xl:px-16 max-lg:px-6 py-6 flex items-center justify-between">
         <a href="#" className="flex items-center gap-1">
-          <div className="h-[56px] relative shrink-0 w-[37.07px]" data-name="logo 2">
-              <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={logoFull} />
+          <div className="content-stretch flex gap-[5.6px] items-center max-w-[931px] relative shrink-0" data-name="logo">
+            <div className="h-[56px] relative shrink-0 w-[37.07px]" data-name="logo 2">
+              <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={logoTP} />
             </div>
+            <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[56px] not-italic relative shrink-0 text-[#111928] text-[39.2px] whitespace-nowrap">ortfolio</p>
+          </div>
         </a>
 
         <div className="flex items-center gap-4">
@@ -49,7 +51,7 @@ export default function Navbar() {
           className="inline-flex items-center gap-2 px-6 py-3 rounded border border-primary"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20">
-            <path d="M10 3.75V12.5M10 12.5L6.875 9.375M10 12.5L13.125 9.375M5 16.25H15" stroke="#5475e5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M10 3.75V12.5M10 12.5L6.875 9.375M10 12.5L13.125 9.375M5 16.25H15" stroke="#5475e5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <span className="gradient-text font-medium text-base leading-6">My Resumé</span>
         </a>

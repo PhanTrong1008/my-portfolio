@@ -21,6 +21,9 @@ import logoDb from '../assets/images/db.png';
 import logoVersion from '../assets/images/version.png';
 import logoApi from '../assets/images/api.png';
 import logoCollab from '../assets/images/collab.png';
+import logoGit from '../assets/images/logo_git.png';
+import logoGithub from '../assets/images/logo_github.png';
+import logoTeam from '../assets/images/logo_team.png'
 
 // Logo map for tech tags used in Projects section
 export const logoMap: Record<string, string> = {
@@ -96,8 +99,8 @@ const skillCategories: SkillCategory[] = [
       <img src={logoVersion} />
     ),
     tags: [
-      { name: 'Git', logo: '' },
-      { name: 'GitHub', logo: '' },
+      { name: 'Git', logo: logoGit },
+      { name: 'GitHub', logo: logoGithub },
     ],
   },
   {
@@ -119,7 +122,7 @@ const skillCategories: SkillCategory[] = [
       <img src={logoCollab} />
     ),
     tags: [
-      { name: 'Working with BA, Designers, Engineers', logo: '' },
+      { name: 'Working with BA, Designers, Engineers', logo: logoTeam },
     ],
   },
 ]
