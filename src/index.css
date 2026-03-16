@@ -107,13 +107,25 @@ body {
   transform: scale(1);
 }
 
+/* Project slide-up animation */
+.slide-up-project {
+  opacity: 0;
+  transform: translateY(80px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.slide-up-project.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* Tag hover animation */
 .tag-hover {
   transition: all 200ms ease-out;
 }
 
 .tag-hover:hover {
-  transform: rotate(5deg) translateY(-5px);
+  transform: rotate(-2deg) translateY(-5px);
   background: linear-gradient(#f0f5ff, #f0f5ff) padding-box,
               linear-gradient(90deg, #06B5D5 0%, #3487F4 100%) border-box;
   border-color: transparent;

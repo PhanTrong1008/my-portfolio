@@ -43,12 +43,12 @@ export default function Hero() {
 
               <div className="flex items-center gap-4 flex-wrap justify-center">
                 {techTags.map((tag) => (
-                  <TechTag key={tag.name} name={tag.name} imageSrc={tag.imageSrc}/>
+                  <TechTag key={tag.name} name={tag.name} imageSrc={tag.imageSrc} />
                 ))}
                 <div className="flex items-center gap-1 p-2 cursor-pointer">
                   <span className="text-sm font-normal text-text-light">...more</span>
                   <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24">
-                    <path d="M9 5L16 12L9 19" stroke="#9CA3AF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M9 5L16 12L9 19" stroke="#9CA3AF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
               </div>
@@ -66,7 +66,7 @@ export default function Hero() {
           <div className="flex items-start gap-4 flex-wrap justify-center">
             <a href="#contact" className="gradient-bg text-white font-medium text-base px-6 py-3 rounded flex items-center gap-2 leading-6">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20">
-                <path d="M15 3.5C13.5 2.5 11.5 2.5 10 4C8.5 2.5 6.5 2.5 5 3.5C2.5 5.5 3 9 10 15C17 9 17.5 5.5 15 3.5Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M15 3.5C13.5 2.5 11.5 2.5 10 4C8.5 2.5 6.5 2.5 5 3.5C2.5 5.5 3 9 10 15C17 9 17.5 5.5 15 3.5Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               Get Started
             </a>

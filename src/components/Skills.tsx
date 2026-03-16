@@ -200,7 +200,7 @@ function SkillCard({ category }: { category: SkillCategory }) {
         {/* Tags */}
         <div className="flex flex-wrap gap-2 items-start justify-center w-full">
           {category.tags.map((tag) => (
-            <div key={tag.name} className="flex gap-1 items-center p-2 rounded-lg border border-gray-tag relative">
+            <div key={tag.name} className="flex gap-1 items-center p-2 rounded-lg border border-gray-tag relative tag-hover">
               {tag.logo && (
                 <div className="relative shrink-0 size-6">
                   <img alt="" className="absolute inset-0 max-w-none object-contain pointer-events-none size-full" src={tag.logo} />

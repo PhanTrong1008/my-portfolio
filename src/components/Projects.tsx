@@ -92,21 +92,121 @@ export default function Projects() {
           <h2 className="text-[48px] max-md:text-[30px] font-bold text-dark leading-[58px] max-md:leading-[38px] text-center">Projects</h2>
         </div>
 
-        {/* Timeline arrow start — desktop only */}
-        <div className="w-px h-20 relative mb-0 max-md:hidden">
-          <svg className="absolute inset-0 w-full h-full" fill="none" viewBox="0 0 6 80">
-            <path d="M3 0V74L0.113 77.887L3 82L5.887 77.887L3 74" stroke="#111928" strokeWidth="1"/>
-          </svg>
-        </div>
-
+        {/* Full timeline — arrow + projects + bottom line, all in one continuous flow */}
         <div className="flex flex-col items-center w-full">
+          {/* Timeline arrow start — desktop only */}
+          <div className="max-md:hidden">
+            <svg width="7" height="83" viewBox="0 0 6 83" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="3" y1="0" x2="3" y2="74" stroke="#111928" strokeWidth="1" />
+              <path d="M3 74L0.113 77.887L3 82L5.887 77.887L3 74Z" fill="#111928" />
+            </svg>
+          </div>
+
           {projects.map((project, index) => (
-            <div
-              key={project.title}
-              className={`animate-on-scroll ${index % 2 === 0 ? 'fade-in-left' : 'fade-in-right'} w-full`}
-              style={{ transitionDelay: '0.1s' }}
-            >
-              <ProjectCard project={project} />
+            <div key={project.title} className="w-full">
+              {/* ─── Desktop/Tablet: 3-column layout ─── */}
+              <div className="hidden md:flex gap-4 lg:gap-10 max-w-[1360px] mx-auto w-full">
+                {/* Left content — slides up */}
+                <div
+                  className="animate-on-scroll slide-up-project flex-1 flex flex-col gap-4"
+                  style={{ transitionDelay: `${index * 0.15}s` }}
+                >
+                  <div className="flex items-center gap-4 h-10">
+                    <div className="flex-1 h-px bg-dark" />
+                    <span className="text-[18px] lg:text-[20px] font-semibold text-primary-mid leading-[26px] lg:leading-[40px] whitespace-nowrap">{project.period}</span>
+                  </div>
+                  <ProjectImage project={project} />
+                  <TechTags technologies={project.technologies} />
+                </div>
+
+                {/* Center timeline — STATIC, always visible */}
+                <div className="flex flex-col items-center">
+                  <div className="w-px h-2 bg-dark" />
+                  <TimelineDot />
+                  <div className="flex-1 w-px bg-dark" />
+                </div>
+
+                {/* Right content — slides up */}
+                <div
+                  className="animate-on-scroll slide-up-project flex-1 flex flex-col gap-4 max-w-[560px] overflow-hidden"
+                  style={{ transitionDelay: `${index * 0.15}s` }}
+                >
+                  <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-1">
+                      <h3 className="text-[28px] font-semibold leading-[40px] gradient-text">{project.title}</h3>
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1 h-px bg-dark" />
+                          <span className="text-base font-medium text-dark leading-6">{project.role}</span>
+                        </div>
+                        <div className="flex items-center justify-end gap-2 text-base leading-6">
+                          <span className="text-[#d1d5db] font-normal">Teamsize:</span>
+                          <span className="text-dark font-medium">{project.teamSize}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-sm font-normal text-text-body leading-[22px]">{project.description}</p>
+                  </div>
+                  <div className="w-full h-px bg-gray-border" />
+                  <div className="flex flex-col gap-1.5">
+                    <p className="text-base font-semibold text-dark leading-6">Responsibilities:</p>
+                    {project.responsibilities.map((item, i) => (
+                      <ul key={i} className="list-disc ml-[21px] text-sm font-normal text-dark leading-[22px]">
+                        <li>{item}</li>
+                      </ul>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* ─── Mobile: 2-column layout ─── */}
+              <div className="md:hidden flex gap-2 w-full max-w-[1360px]">
+                {/* Left timeline — STATIC, always visible */}
+                <div className="flex flex-col items-center flex-shrink-0 w-6">
+                  <TimelineDot />
+                  <div className="flex-1 w-px bg-dark" />
+                </div>
+
+                {/* Right content — slides up */}
+                <div
+                  className="animate-on-scroll slide-up-project flex-1 flex flex-col gap-4 min-w-0"
+                  style={{ transitionDelay: `${index * 0.15}s` }}
+                >
+                  <div className="flex flex-col gap-1">
+                    <div className="h-6 flex items-center gap-4">
+                      <span className="text-base font-semibold text-primary-mid leading-6 whitespace-nowrap">{project.period}</span>
+                      <div className="flex-1 h-px bg-dark" />
+                    </div>
+                    <ProjectImage project={project} />
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    <h3 className="text-[30px] font-bold leading-[38px] gradient-text">{project.title}</h3>
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 h-px bg-dark" />
+                        <span className="text-sm font-medium text-dark leading-[22px]">{project.role}</span>
+                      </div>
+                      <div className="flex items-center justify-end gap-2">
+                        <span className="text-sm font-normal text-[#d1d5db] leading-[22px]">Teamsize:</span>
+                        <span className="text-sm font-normal text-dark leading-[22px]">{project.teamSize}</span>
+                      </div>
+                    </div>
+                    <p className="text-sm font-normal text-text-body leading-[22px]">{project.description}</p>
+                  </div>
+                  <TechTags technologies={project.technologies} />
+                  <div className="w-full h-px bg-gray-border" />
+                  <div className="flex flex-col gap-1.5">
+                    <p className="text-base font-semibold text-dark leading-6">Responsibilities:</p>
+                    {project.responsibilities.map((item, i) => (
+                      <ul key={i} className="list-disc ml-[21px] text-sm font-normal text-dark leading-[22px]">
+                        <li>{item}</li>
+                      </ul>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Connecting lines between projects — always visible, no animation */}
               {index < projects.length - 1 && (
                 <div className="flex justify-center max-md:hidden">
                   <div className="w-px h-20 lg:h-40 bg-dark" />
@@ -122,6 +222,7 @@ export default function Projects() {
             </div>
           ))}
 
+          {/* Bottom line — always visible */}
           <div className="flex justify-center max-md:hidden">
             <div className="w-px h-20 lg:h-40 bg-dark" />
           </div>
@@ -177,106 +278,11 @@ function TechTags({ technologies }: { technologies: string[] }) {
 
 function TimelineDot() {
   return (
-    <div className="w-6 h-6 rounded-full border-2 border-primary bg-[#fcfcfd] flex items-center justify-center flex-shrink-0">
-      <div className="w-2 h-2 bg-accent rotate-45" />
+    <div className="w-6 h-6 rounded-full p-[2px] bg-[linear-gradient(78.4deg,#64C2DB_4.49%,#2662D9_87.94%)] flex items-center justify-center flex-shrink-0">
+      <div className="w-full h-full rounded-full bg-[#fcfcfd] flex items-center justify-center">
+        <div className="w-2 h-2 bg-accent rotate-45" />
+      </div>
     </div>
   )
 }
 
-function ProjectCard({ project }: { project: (typeof projects)[number] }) {
-  return (
-    <>
-      {/* ─── Desktop/Tablet layout ─── */}
-      <div className="hidden md:flex gap-4 lg:gap-10 max-w-[1360px] mx-auto w-full">
-        <div className="flex-1 flex flex-col gap-4">
-          <div className="flex items-center gap-4 h-10">
-            <div className="flex-1 h-px bg-dark" />
-            <span className="text-[18px] lg:text-[20px] font-semibold text-primary-mid leading-[26px] lg:leading-[40px] whitespace-nowrap">{project.period}</span>
-          </div>
-          <ProjectImage project={project} />
-          <TechTags technologies={project.technologies} />
-        </div>
-
-        <div className="flex flex-col items-center">
-          <div className="w-px h-2 bg-dark" />
-          <TimelineDot />
-          <div className="flex-1 w-px bg-dark" />
-        </div>
-
-        <div className="flex-1 flex flex-col gap-4 max-w-[560px] overflow-hidden">
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1">
-              <h3 className="text-[28px] font-semibold leading-[40px] gradient-text">{project.title}</h3>
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-2">
-                  <div className="flex-1 h-px bg-dark" />
-                  <span className="text-base font-medium text-dark leading-6">{project.role}</span>
-                </div>
-                <div className="flex items-center justify-end gap-2 text-base leading-6">
-                  <span className="text-[#d1d5db] font-normal">Teamsize:</span>
-                  <span className="text-dark font-medium">{project.teamSize}</span>
-                </div>
-              </div>
-            </div>
-            <p className="text-sm font-normal text-text-body leading-[22px]">{project.description}</p>
-          </div>
-          <div className="w-full h-px bg-gray-border" />
-          <div className="flex flex-col gap-1.5">
-            <p className="text-base font-semibold text-dark leading-6">Responsibilities:</p>
-            {project.responsibilities.map((item, i) => (
-              <ul key={i} className="list-disc ml-[21px] text-sm font-normal text-dark leading-[22px]">
-                <li>{item}</li>
-              </ul>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ─── Mobile layout ─── */}
-      <div className="md:hidden flex gap-2 w-full max-w-[1360px]">
-        <div className="flex flex-col items-center flex-shrink-0 w-6">
-          <TimelineDot />
-          <div className="flex-1 w-px bg-dark" />
-        </div>
-
-        <div className="flex-1 flex flex-col gap-4 min-w-0">
-          <div className="flex flex-col gap-1">
-            <div className="h-6 flex items-center gap-4">
-              <span className="text-base font-semibold text-primary-mid leading-6 whitespace-nowrap">{project.period}</span>
-              <div className="flex-1 h-px bg-dark" />
-            </div>
-            <ProjectImage project={project} />
-          </div>
-
-          <div className="flex flex-col gap-3">
-            <h3 className="text-[30px] font-bold leading-[38px] gradient-text">{project.title}</h3>
-            <div className="flex flex-col gap-1">
-              <div className="flex items-center gap-2">
-                <div className="flex-1 h-px bg-dark" />
-                <span className="text-sm font-medium text-dark leading-[22px]">{project.role}</span>
-              </div>
-              <div className="flex items-center justify-end gap-2">
-                <span className="text-sm font-normal text-[#d1d5db] leading-[22px]">Teamsize:</span>
-                <span className="text-sm font-normal text-dark leading-[22px]">{project.teamSize}</span>
-              </div>
-            </div>
-            <p className="text-sm font-normal text-text-body leading-[22px]">{project.description}</p>
-          </div>
-
-          <TechTags technologies={project.technologies} />
-
-          <div className="w-full h-px bg-gray-border" />
-
-          <div className="flex flex-col gap-1.5">
-            <p className="text-base font-semibold text-dark leading-6">Responsibilities:</p>
-            {project.responsibilities.map((item, i) => (
-              <ul key={i} className="list-disc ml-[21px] text-sm font-normal text-dark leading-[22px]">
-                <li>{item}</li>
-              </ul>
-            ))}
-          </div>
-        </div>
-      </div>
-    </>
-  )
-}
