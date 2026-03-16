@@ -132,9 +132,9 @@ export default function Skills() {
 
   return (
     <section id="skills" className="bg-gray-light">
-      <div ref={sectionRef} className="fade-in-section max-w-[1440px] mx-auto px-[192px] max-xl:px-24 max-lg:px-10 max-md:px-6 flex flex-col items-center gap-10">
+      <div ref={sectionRef} className="fade-in-section section-container max-lg:px-10 max-md:px-4 flex flex-col items-center gap-10 max-md:gap-4">
         <div className="flex flex-col items-center">
-          <div className="w-px h-20 bg-gray-border" />
+          <div className="w-px h-20 max-md:h-10 bg-gray-border" />
           <div className="w-6 h-px bg-gray-border" />
         </div>
 
@@ -143,15 +143,15 @@ export default function Skills() {
             <div className="w-1.5 h-1.5 bg-text-muted" />
             <p className="text-lg font-medium text-text-muted leading-[26px]">WHAT I HAVE</p>
           </div>
-          <h2 className="text-[48px] max-md:text-[36px] font-bold leading-[58px] max-md:leading-[44px]">
+          <h2 className="text-[48px] max-md:text-[30px] font-bold leading-[58px] max-md:leading-[38px]">
             <span className="text-dark">Skills & </span>
             <span className="gradient-text">Expertise</span>
           </h2>
         </div>
 
         {/* Skill Cards Grid */}
-        <div className="flex flex-col gap-6 items-start w-full max-w-[1360px]">
-          <div className="grid grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1 gap-6 w-full">
+        <div className="flex flex-col gap-6 max-md:gap-4 items-start w-full">
+          <div className="grid grid-cols-3 max-lg:grid-cols-2 max-md:grid-cols-1 gap-6 max-md:gap-4 w-full">
             {skillCategories.map((category) => (
               <SkillCard key={category.title} category={category} />
             ))}
@@ -160,7 +160,7 @@ export default function Skills() {
 
         <div className="flex flex-col items-center">
           <div className="w-6 h-px bg-gray-border" />
-          <div className="w-px h-20 bg-gray-border" />
+          <div className="w-px h-20 max-md:h-10 bg-gray-border" />
         </div>
       </div>
     </section>

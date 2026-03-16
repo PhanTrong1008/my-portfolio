@@ -126,21 +126,21 @@ export default function Contact() {
 
         <div
           ref={sectionRef}
-          className="fade-in-section max-w-[1440px] mx-auto px-[384px] max-xl:px-48 max-lg:px-6 max-md:px-6 py-20 max-lg:py-10"
+          className="fade-in-section section-container max-lg:px-6 max-md:px-4 py-20 max-lg:py-10 max-md:py-6"
         >
           <div className="flex flex-col items-center gap-6">
             <div className="flex flex-col items-center gap-2">
               <div className="flex items-center gap-2">
                 <div className="w-1.5 h-1.5 bg-text-muted" />
-                <p className="text-lg font-medium text-text-muted leading-[26px]">GET IN TOUCH</p>
+                <p className="text-lg max-md:text-base font-medium text-text-muted leading-[26px] max-md:leading-6">GET IN TOUCH</p>
               </div>
-              <h2 className="text-[48px] max-md:text-[32px] font-bold leading-[58px] max-md:leading-[40px] text-center">
+              <h2 className="text-[48px] max-md:text-[30px] font-bold leading-[58px] max-md:leading-[38px] text-center">
                 <span className="text-dark">LET'S WORK </span>
                 <span className="gradient-text">TOGETHER</span>
               </h2>
             </div>
 
-            <div className="text-base font-medium text-text-body leading-6 text-center">
+            <div className="text-base max-md:text-sm font-medium max-md:font-normal text-text-body leading-6 max-md:leading-[22px] text-center">
               <p>I'm available for full-time roles & freelance projects.</p>
               <p>My inbox is always open, whether you have a question or just want to say hi.</p>
               <p>I'll try my best to get back to you!</p>
@@ -149,7 +149,7 @@ export default function Contact() {
             <form
               onSubmit={handleSubmit}
               noValidate
-              className="w-full bg-white rounded-[40px] max-md:rounded-2xl border border-gray-border p-4 flex flex-col gap-4"
+              className="w-full bg-white rounded-[40px] max-md:rounded-[24px] border border-gray-border p-4 flex flex-col gap-4"
             >
               <div className="flex gap-4 max-md:flex-col">
                 <div className="flex-1 flex flex-col gap-2">
@@ -211,7 +211,7 @@ export default function Contact() {
                 <button
                   type="submit"
                   disabled={sending}
-                  className="gradient-bg text-white font-medium text-base w-[200px] h-14 rounded flex items-center justify-center gap-2 leading-6 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="gradient-bg text-white font-medium text-base w-[200px] max-md:w-full h-14 rounded flex items-center justify-center gap-2 leading-6 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {sending ? (
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

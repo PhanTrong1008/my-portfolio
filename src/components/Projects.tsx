@@ -83,7 +83,7 @@ export default function Projects() {
         <p className="bg-text-watermark max-md:bg-none max-md:text-[#F3F4F6] max-md:opacity-80 text-[120px] max-md:text-[64px] font-black text-center max-md:text-left leading-normal">PROJECTS</p>
       </div>
 
-      <div ref={containerRef} className="max-w-[1440px] mx-auto px-[192px] max-xl:px-24 max-lg:px-6 max-md:px-4 flex flex-col items-center gap-6 relative">
+      <div ref={containerRef} className="section-container max-lg:px-6 max-md:px-4 flex flex-col items-center gap-6 relative">
         <div className="flex flex-col items-center gap-2 mb-10 max-md:mb-0">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-1.5 bg-text-muted" />
@@ -95,17 +95,21 @@ export default function Projects() {
         {/* Full timeline — arrow + projects + bottom line, all in one continuous flow */}
         <div className="flex flex-col items-center w-full">
           {/* Timeline arrow start — desktop only */}
-          <div className="max-md:hidden">
-            <svg width="7" height="83" viewBox="0 0 6 83" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <line x1="3" y1="0" x2="3" y2="74" stroke="#111928" strokeWidth="1" />
-              <path d="M3 74L0.113 77.887L3 82L5.887 77.887L3 74Z" fill="#111928" />
-            </svg>
+          <div className="hidden md:flex gap-4 lg:gap-10 w-full">
+            <div className="flex-1" />
+            <div className="flex flex-col items-center">
+              <svg width="7" height="83" viewBox="0 0 6 83" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="3" y1="0" x2="3" y2="74" stroke="#111928" strokeWidth="1" />
+                <path d="M3 74L0.113 77.887L3 82L5.887 77.887L3 74Z" fill="#111928" />
+              </svg>
+            </div>
+            <div className="flex-1 max-w-[560px]" />
           </div>
 
           {projects.map((project, index) => (
             <div key={project.title} className="w-full">
               {/* ─── Desktop/Tablet: 3-column layout ─── */}
-              <div className="hidden md:flex gap-4 lg:gap-10 max-w-[1360px] mx-auto w-full">
+              <div className="hidden md:flex gap-4 lg:gap-10 w-full">
                 {/* Left content — slides up */}
                 <div
                   className="animate-on-scroll slide-up-project flex-1 flex flex-col gap-4"
@@ -160,7 +164,7 @@ export default function Projects() {
               </div>
 
               {/* ─── Mobile: 2-column layout ─── */}
-              <div className="md:hidden flex gap-2 w-full max-w-[1360px]">
+              <div className="md:hidden flex gap-2 w-full">
                 {/* Left timeline — STATIC, always visible */}
                 <div className="flex flex-col items-center flex-shrink-0 w-6">
                   <TimelineDot />
@@ -208,8 +212,12 @@ export default function Projects() {
 
               {/* Connecting lines between projects — always visible, no animation */}
               {index < projects.length - 1 && (
-                <div className="flex justify-center max-md:hidden">
-                  <div className="w-px h-20 lg:h-40 bg-dark" />
+                <div className="hidden md:flex gap-4 lg:gap-10 w-full">
+                  <div className="flex-1" />
+                  <div className="flex flex-col items-center">
+                    <div className="w-px h-20 lg:h-40 bg-dark" />
+                  </div>
+                  <div className="flex-1 max-w-[560px]" />
                 </div>
               )}
               {index < projects.length - 1 && (
@@ -223,8 +231,12 @@ export default function Projects() {
           ))}
 
           {/* Bottom line — always visible */}
-          <div className="flex justify-center max-md:hidden">
-            <div className="w-px h-20 lg:h-40 bg-dark" />
+          <div className="hidden md:flex gap-4 lg:gap-10 w-full">
+            <div className="flex-1" />
+            <div className="flex flex-col items-center">
+              <div className="w-px h-20 lg:h-40 bg-dark" />
+            </div>
+            <div className="flex-1 max-w-[560px]" />
           </div>
         </div>
       </div>
@@ -268,7 +280,7 @@ function TechTags({ technologies }: { technologies: string[] }) {
             ) : (
               <div className="w-6 h-6 bg-gray-100 rounded" />
             )}
-            <span className="text-sm font-medium text-text-light leading-[22px]">{tech}</span>
+            <span className="text-sm font-medium text-text-light leading-[22px] max-md:hidden">{tech}</span>
           </div>
         ))}
       </div>
