@@ -29,7 +29,7 @@ import logoCSharp from '../assets/images/logo_csharp.png';
 import logoRedis from '../assets/images/logo_redis.png';
 import logoGremlin from '../assets/images/logo_gremlin.png';
 import logoRedux from '../assets/images/logo_redux.png';
-import logoCloudinary from '../assets/images/logo_Cloudinary.png';
+import logoCloudinary from '../assets/images/logo_cloudinary.png';
 
 // Logo map for tech tags used in Projects section
 export const logoMap: Record<string, string> = {
