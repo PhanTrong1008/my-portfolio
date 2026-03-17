@@ -149,7 +149,7 @@ export default function Contact() {
             <form
               onSubmit={handleSubmit}
               noValidate
-              className="w-full bg-white rounded-[40px] max-md:rounded-[24px] border border-gray-border p-4 flex flex-col gap-4"
+              className="w-full max-w-2xl bg-white rounded-[40px] max-md:rounded-[24px] border border-gray-border p-4 flex flex-col gap-4"
             >
               <div className="flex gap-4 max-md:flex-col">
                 <div className="flex-1 flex flex-col gap-2">

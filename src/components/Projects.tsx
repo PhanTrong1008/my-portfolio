@@ -35,7 +35,7 @@ const projects = [
       'Developed the leave transfer module',
       'Developed RESTful APIs using DotNet',
     ],
-    technologies: ['Angular', 'NgRx', 'NgPrime', 'SCSS', 'C#', '.NET', 'Microsoft SQL Server'],
+    technologies: ['Angular', 'NgRx', 'C#', '.NET', 'Microsoft SQL Server'],
     image: imgRestaff,
   },
   {
@@ -52,7 +52,7 @@ const projects = [
       'Implemented caching techniques to reduce page load times',
       'Developed RESTful APIs using Express.js and Node.js',
     ],
-    technologies: ['Angular', 'RxJS', 'SCSS', 'Express JS', 'Gremlin', 'Redis', 'JanusGraph'],
+    technologies: ['Angular', 'RxJS', 'SCSS', 'Express JS', 'Gremlin', 'Redis'],
     image: imgTimes,
   },
   {
@@ -69,7 +69,7 @@ const projects = [
       'Managed tasks and ensured the team consistently delivered new features and improvements in each sprint, as agreed with mentors',
       'Collaborated closely with front-end developers to integrate back-end APIs, ensuring a seamless user experience',
     ],
-    technologies: ['Next JS', 'SCSS', 'Nest JS', 'TypeORM', 'Tailwind CSS', 'Ant Design', 'React', 'Redux', 'PostgreSQL', 'Cloudinary'],
+    technologies: ['Next JS', 'SCSS', 'Nest JS', 'Tailwind CSS', 'React', 'Redux', 'PostgreSQL', 'Cloudinary'],
     image: imgTinher,
   },
 ]
@@ -95,24 +95,24 @@ export default function Projects() {
         {/* Full timeline — arrow + projects + bottom line, all in one continuous flow */}
         <div className="flex flex-col items-center w-full">
           {/* Timeline arrow start — desktop only */}
-          <div className="hidden md:flex gap-4 lg:gap-10 w-full">
-            <div className="flex-1" />
+          <div className="hidden md:grid grid-cols-[1fr_24px_1fr] gap-4 lg:gap-10 w-full">
+            <div />
             <div className="flex flex-col items-center">
               <svg width="7" height="83" viewBox="0 0 6 83" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <line x1="3" y1="0" x2="3" y2="74" stroke="#111928" strokeWidth="1" />
-                <path d="M3 74L0.113 77.887L3 82L5.887 77.887L3 74Z" fill="#111928" />
+                <path d="M3 8L0.113 4.113L3 0L5.887 4.113L3 8Z" fill="#111928" />
+                <line x1="3" y1="8" x2="3" y2="83" stroke="#111928" strokeWidth="1" />
               </svg>
             </div>
-            <div className="flex-1 max-w-[560px]" />
+            <div />
           </div>
 
           {projects.map((project, index) => (
             <div key={project.title} className="w-full">
               {/* ─── Desktop/Tablet: 3-column layout ─── */}
-              <div className="hidden md:flex gap-4 lg:gap-10 w-full">
+              <div className="hidden md:grid grid-cols-[1fr_24px_1fr] gap-4 lg:gap-10 w-full">
                 {/* Left content — slides up */}
                 <div
-                  className="animate-on-scroll slide-up-project flex-1 flex flex-col gap-4"
+                  className="animate-on-scroll slide-up-project flex flex-col gap-4"
                   style={{ transitionDelay: `${index * 0.15}s` }}
                 >
                   <div className="flex items-center gap-4 h-10">
@@ -132,7 +132,7 @@ export default function Projects() {
 
                 {/* Right content — slides up */}
                 <div
-                  className="animate-on-scroll slide-up-project flex-1 flex flex-col gap-4 max-w-[560px] overflow-hidden"
+                  className="animate-on-scroll slide-up-project flex flex-col gap-4 overflow-hidden"
                   style={{ transitionDelay: `${index * 0.15}s` }}
                 >
                   <div className="flex flex-col gap-4">
@@ -212,12 +212,12 @@ export default function Projects() {
 
               {/* Connecting lines between projects — always visible, no animation */}
               {index < projects.length - 1 && (
-                <div className="hidden md:flex gap-4 lg:gap-10 w-full">
-                  <div className="flex-1" />
+                <div className="hidden md:grid grid-cols-[1fr_24px_1fr] gap-4 lg:gap-10 w-full">
+                  <div />
                   <div className="flex flex-col items-center">
                     <div className="w-px h-20 lg:h-40 bg-dark" />
                   </div>
-                  <div className="flex-1 max-w-[560px]" />
+                  <div />
                 </div>
               )}
               {index < projects.length - 1 && (
@@ -231,12 +231,12 @@ export default function Projects() {
           ))}
 
           {/* Bottom line — always visible */}
-          <div className="hidden md:flex gap-4 lg:gap-10 w-full">
-            <div className="flex-1" />
+          <div className="hidden md:grid grid-cols-[1fr_24px_1fr] gap-4 lg:gap-10 w-full">
+            <div />
             <div className="flex flex-col items-center">
               <div className="w-px h-20 lg:h-40 bg-dark" />
             </div>
-            <div className="flex-1 max-w-[560px]" />
+            <div />
           </div>
         </div>
       </div>
@@ -274,7 +274,7 @@ function TechTags({ technologies }: { technologies: string[] }) {
       <p className="text-base font-semibold md:font-semibold max-md:font-medium text-dark leading-6">Technologies:</p>
       <div className="flex flex-wrap gap-4 max-md:gap-2">
         {technologies.map((tech) => (
-          <div key={tech} className="flex items-center gap-1 border border-gray-tag rounded-lg p-2">
+          <div key={tech} className="flex items-center gap-1 border border-gray-tag rounded-lg p-2 tag-hover">
             {logoMap[tech] ? (
               <img src={logoMap[tech]} alt={tech} className="w-6 h-6 object-contain" />
             ) : (

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #5475e5;
+  --color-primary: #64c2db;
   --color-primary-dark: #1c3fb7;
   --color-primary-mid: #2662d9;
   --color-dark: #111928;
@@ -149,11 +149,13 @@ body {
   transition: all 200ms ease-out;
 }
 
-.tag-hover:hover {
-  transform: rotate(-2deg) translateY(-5px);
-  background: linear-gradient(#f0f5ff, #f0f5ff) padding-box,
-              linear-gradient(90deg, #06B5D5 0%, #3487F4 100%) border-box;
-  border-color: transparent;
+@media (min-width: 1024px) {
+  .tag-hover:hover {
+    transform: rotate(-2deg) translateY(-5px);
+    background: linear-gradient(#f0f5ff, #f0f5ff) padding-box,
+                linear-gradient(90deg, #06B5D5 0%, #3487F4 100%) border-box;
+    border-color: transparent;
+  }
 }
 
 /* Skill card hover - gradient title */
@@ -161,11 +163,19 @@ body {
   transition: all 300ms ease;
 }
 
-.group:hover .skill-card-title {
-  background: linear-gradient(90deg, #06B5D5 0%, #3487F4 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+@media (min-width: 1024px) {
+  .group:hover .skill-card-title {
+    background: linear-gradient(90deg, #06B5D5 0%, #3487F4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@media (max-width: 1023px) {
+  .skill-card-title {
+    background-clip: text;
+  }
 }
 
 /* Toast slide-in animation */

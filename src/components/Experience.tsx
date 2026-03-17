@@ -45,7 +45,7 @@ export default function Experience() {
           {experiences.map((exp, idx) => (
             <div
               key={idx}
-              className="group bg-white rounded-[40px] max-md:rounded-2xl border border-gray-border p-10 max-md:p-4 overflow-hidden transition-all duration-200 ease-out lg:hover:border-primary cursor-default"
+              className="group bg-white rounded-[40px] max-md:rounded-2xl border border-gray-border max-lg:border-primary p-10 max-md:p-4 overflow-hidden transition-all duration-200 ease-out lg:hover:border-primary cursor-default"
             >
               <div className="flex flex-col gap-6 max-md:gap-4">
                 <div className="flex items-center justify-between">
@@ -57,7 +57,7 @@ export default function Experience() {
                     />
                   </div>
                   <div className="flex flex-col items-end">
-                    <p className="text-sm font-normal leading-[22px] text-text-muted max-md:text-dark transition-colors duration-200 ease-out lg:group-hover:text-dark">
+                    <p className="text-sm font-normal leading-[22px] text-text-muted max-lg:text-dark transition-colors duration-200 ease-out lg:group-hover:text-dark">
                       {exp.role}
                     </p>
                     <p className="text-sm font-medium leading-[22px] text-primary-mid">
@@ -66,7 +66,7 @@ export default function Experience() {
                   </div>
                 </div>
 
-                <p className="text-base max-md:text-sm font-normal leading-6 max-md:leading-[22px] text-text-muted max-md:text-dark transition-colors duration-200 ease-out lg:group-hover:text-dark">
+                <p className="text-base max-md:text-sm font-normal leading-6 max-md:leading-[22px] text-text-muted max-lg:text-dark transition-colors duration-200 ease-out lg:group-hover:text-dark">
                   {exp.description}
                 </p>
               </div>

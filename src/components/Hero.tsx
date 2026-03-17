@@ -4,6 +4,8 @@ import cvFile from '../assets/PhanNguyenDucTrong_CV.pdf'
 import logoJs from '../assets/images/logo_js.png'
 import logoTs from '../assets/images/logo_ts.png'
 import logoAngular from '../assets/images/logo_angular.png'
+import rocketIcon from '../assets/images/rocket.png';
+import downloadIcon from '../assets/images/download.png';
 
 const techTags = [
   { name: 'Javascript', imageSrc: logoJs },
@@ -13,7 +15,7 @@ const techTags = [
 
 export default function Hero() {
   return (
-    <section id="hero" className="relative h-[1024px] max-md:h-auto flex items-center overflow-hidden">
+    <section id="hero" className="relative h-[1024px] max-md:h-auto max-md:pt-10 flex items-center overflow-hidden">
       <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
         <source src="/video_portfolio.mp4" type="video/mp4" />
       </video>
@@ -61,15 +63,11 @@ export default function Hero() {
 
           <div className="flex items-start gap-4 flex-wrap justify-center max-md:flex-col max-md:gap-3 max-md:w-full">
             <a href="#contact" className="gradient-bg text-white font-medium text-base px-6 py-3 rounded flex items-center gap-2 leading-6 max-md:w-full max-md:justify-center">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20">
-                <path d="M15 3.5C13.5 2.5 11.5 2.5 10 4C8.5 2.5 6.5 2.5 5 3.5C2.5 5.5 3 9 10 15C17 9 17.5 5.5 15 3.5Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <img className='w-5 h-5' src={rocketIcon} alt="Get Started" />
               Get Started
             </a>
             <a href={cvFile} download="PhanNguyenDucTrong_CV.pdf" className="border border-primary rounded px-6 py-3 flex items-center gap-2 leading-6 max-md:w-full max-md:justify-center">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20">
-                <path d="M10 3.75V12.5M10 12.5L6.875 9.375M10 12.5L13.125 9.375M5 16.25H15" stroke="#5475e5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <img className='w-5 h-5' src={downloadIcon} alt="Download" />
               <span className="gradient-text font-medium">My Resumé</span>
             </a>
           </div>

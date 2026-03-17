@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import cvFile from '../assets/PhanNguyenDucTrong_CV.pdf'
 import logoTP from '../../public/tp_logo.png';
+import downloadIcon from '../assets/images/download.png';
 
 const navLinks = [
   { label: 'About', href: '#about' },
@@ -50,9 +51,7 @@ export default function Navbar() {
           download="PhanNguyenDucTrong_CV.pdf"
           className="inline-flex items-center gap-2 px-6 py-3 rounded border border-primary"
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20">
-            <path d="M10 3.75V12.5M10 12.5L6.875 9.375M10 12.5L13.125 9.375M5 16.25H15" stroke="#5475e5" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <img className='w-5 h-5' src={downloadIcon} alt="Download" />
           <span className="gradient-text font-medium text-base leading-6">My Resumé</span>
         </a>
       </div>

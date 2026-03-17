@@ -24,6 +24,12 @@ import logoCollab from '../assets/images/collab.png';
 import logoGit from '../assets/images/logo_git.png';
 import logoGithub from '../assets/images/logo_github.png';
 import logoTeam from '../assets/images/logo_team.png'
+import logoNgRx from '../assets/images/logo_ngrx.png';
+import logoCSharp from '../assets/images/logo_csharp.png';
+import logoRedis from '../assets/images/logo_redis.png';
+import logoGremlin from '../assets/images/logo_gremlin.png';
+import logoRedux from '../assets/images/logo_redux.png';
+import logoCloudinary from '../assets/images/logo_Cloudinary.png';
 
 // Logo map for tech tags used in Projects section
 export const logoMap: Record<string, string> = {
@@ -42,6 +48,12 @@ export const logoMap: Record<string, string> = {
   'Javascript': logoJs,
   'Microsoft SQL Server': logoMicrosoft,
   'Tailwind CSS': logoTailwind,
+  'NgRx': logoNgRx,
+  'C#': logoCSharp,
+  'Redis': logoRedis,
+  'Gremlin': logoGremlin,
+  'Redux': logoRedux,
+  'Cloudinary': logoCloudinary
 }
 
 interface SkillCategory {
@@ -169,7 +181,7 @@ export default function Skills() {
 
 function SkillCard({ category }: { category: SkillCategory }) {
   return (
-    <div className="group relative rounded-lg overflow-hidden border border-gray-border hover:border-primary transition-colors duration-300 bg-white cursor-default lg:h-[362px] flex flex-col">
+    <div className="group relative rounded-lg overflow-hidden border border-gray-border lg:hover:border-primary transition-colors duration-300 bg-white cursor-default lg:h-[362px] flex flex-col">
       {/* Header bar */}
       <div className="bg-[#f3f4f6] relative w-full border-b border-gray-border shrink-0">
         <div className="flex items-center justify-between px-4 py-3">
@@ -188,12 +200,12 @@ function SkillCard({ category }: { category: SkillCategory }) {
       {/* Body */}
       <div className="flex flex-col gap-4 items-center px-4 py-5 flex-1">
         {/* Icon */}
-        <div className="size-10 rounded-lg group-hover:text-white flex items-center justify-center text-[#0f0f0f] transition-colors duration-300">
+        <div className="size-10 rounded-lg lg:group-hover:text-white flex items-center justify-center text-[#0f0f0f] transition-colors duration-300">
           {category.icon}
         </div>
 
         {/* Description */}
-        <p className="text-sm font-normal leading-[22px] text-text-muted text-center group-hover:text-dark transition-colors duration-300 min-h-[44px]">
+        <p className="text-sm font-normal leading-[22px] text-text-muted text-center lg:group-hover:text-dark max-lg:text-dark transition-colors duration-300 min-h-[44px]">
           {category.description}
         </p>
 
