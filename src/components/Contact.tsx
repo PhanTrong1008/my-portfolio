@@ -1,232 +1,222 @@
-import { useState, useEffect, type FormEvent } from 'react'
-import { useScrollAnimation } from '../hooks/useScrollAnimation'
+import { useRef, useState, type FormEvent, type ReactNode } from 'react'
 import emailjs from '@emailjs/browser'
-import gridImg from '../assets/images/grid.png'
+import { D } from '../data/portfolio'
+import { Icon, Words } from './common'
 
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID as string | undefined
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string | undefined
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string | undefined
+const CAN_SEND = !!(EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY)
 
-function isValidEmail(email: string) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-}
+type FieldKey = 'name' | 'email' | 'subject' | 'message'
+const EMPTY: Record<FieldKey, string> = { name: '', email: '', subject: '', message: '' }
+const handle = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')
+const telHref = (phone: string) => `tel:${phone.replace(/[^+\d]/g, '')}`
 
-type ToastType = 'success' | 'error'
-
-function Toast({ message, type, onClose }: { message: string; type: ToastType; onClose: () => void }) {
-  useEffect(() => {
-    const timer = setTimeout(onClose, 4000)
-    return () => clearTimeout(timer)
-  }, [onClose])
-
+function ContactField({ k, label, error, children }: { k: FieldKey; label: string; error?: string; children: ReactNode }) {
   return (
-    <div className="fixed top-6 right-6 z-50 animate-slide-in">
-      <div
-        className={`flex items-center gap-3 px-5 py-4 rounded-xl shadow-lg border ${
-          type === 'success'
-            ? 'bg-white border-green text-dark'
-            : 'bg-white border-red-400 text-dark'
-        }`}
-      >
-        {type === 'success' ? (
-          <div className="w-6 h-6 rounded-full bg-green flex items-center justify-center flex-shrink-0">
-            <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 14 14">
-              <path d="M2 7L5.5 10.5L12 3.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-        ) : (
-          <div className="w-6 h-6 rounded-full bg-red-400 flex items-center justify-center flex-shrink-0">
-            <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 14 14">
-              <path d="M3 3L11 11M11 3L3 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-          </div>
+    <div className={`field${error ? ' has-error' : ''}`}>
+      <label className="field__l" htmlFor={`f-${k}`}>
+        <span>{label}</span>
+        {error && (
+          <span className="field__err" id={`f-${k}-err`}>
+            {error}
+          </span>
         )}
-        <span className="text-sm font-medium leading-5">{message}</span>
-        <button onClick={onClose} className="ml-2 text-text-muted hover:text-dark cursor-pointer">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16">
-            <path d="M4 4L12 12M12 4L4 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-        </button>
-      </div>
+      </label>
+      {children}
     </div>
   )
 }
 
 export default function Contact() {
-  const sectionRef = useScrollAnimation()
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  })
-  const [errors, setErrors] = useState<Record<string, string>>({})
-  const [sending, setSending] = useState(false)
-  const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null)
+  const id = D.identity
+  const [form, setForm] = useState(EMPTY)
+  const [errors, setErrors] = useState<Partial<Record<FieldKey, string>>>({})
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'opened'>('idle')
+  const [attempts, setAttempts] = useState(0)
+  const [copied, setCopied] = useState('')
+  const mailRef = useRef<HTMLAnchorElement>(null)
 
   const validate = () => {
-    const newErrors: Record<string, string> = {}
-    if (!formData.name.trim()) newErrors.name = 'Name is required'
-    if (!formData.email.trim()) newErrors.email = 'Email is required'
-    else if (!isValidEmail(formData.email)) newErrors.email = 'Please enter a valid email'
-    if (!formData.subject.trim()) newErrors.subject = 'Subject is required'
-    if (!formData.message.trim()) newErrors.message = 'Message is required'
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
+    const e: Partial<Record<FieldKey, string>> = {}
+    if (!form.name.trim()) e.name = 'Required'
+    if (!form.email.trim()) e.email = 'Required'
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Check the address'
+    if (!form.subject.trim()) e.subject = 'Required'
+    if (!form.message.trim()) e.message = 'Required'
+    return e
   }
+  const signed = () => `${form.message}\n\n— ${form.name} (${form.email})`
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-    if (!validate()) return
-
-    setSending(true)
-    try {
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        {
-          from_name: formData.name,
-          from_email: formData.email,
-          subject: formData.subject,
-          message: formData.message,
-          reply_to: formData.email
-        },
-        EMAILJS_PUBLIC_KEY
-      )
-      setToast({ message: 'Thank you for contacting me! I\'ll get back to you soon.', type: 'success' })
-      setFormData({ name: '', email: '', subject: '', message: '' })
-      setErrors({})
-    } catch {
-      setToast({ message: 'Failed to send message. Please try again later.', type: 'error' })
-    } finally {
-      setSending(false)
+  const submit = async (ev: FormEvent) => {
+    ev.preventDefault()
+    const errs = validate()
+    setErrors(errs)
+    const keys = Object.keys(errs)
+    if (keys.length) {
+      document.getElementById(`f-${keys[0]}`)?.focus()
+      return
     }
+    setAttempts((n) => n + 1)
+    if (CAN_SEND) {
+      setStatus('sending')
+      try {
+        await emailjs.send(
+          EMAILJS_SERVICE_ID!,
+          EMAILJS_TEMPLATE_ID!,
+          { from_name: form.name, from_email: form.email, subject: form.subject, message: form.message, reply_to: form.email },
+          EMAILJS_PUBLIC_KEY!,
+        )
+        setForm(EMPTY)
+        setStatus('sent')
+        return
+      } catch {
+        /* Sending failed: hand the message to the visitor's email app instead */
+      }
+    }
+    const a = document.createElement('a')
+    a.href = `mailto:${id.email}?subject=${encodeURIComponent(form.subject)}&body=${encodeURIComponent(signed())}`
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+    setStatus('opened')
   }
 
-  const handleChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-    // Clear error for that field when user starts typing
-    if (errors[field]) {
-      setErrors((prev) => {
-        const next = { ...prev }
-        delete next[field]
-        return next
+  const update = (k: FieldKey, v: string) => {
+    setForm((f) => ({ ...f, [k]: v }))
+    setStatus((s) => (s === 'sent' ? 'idle' : s))
+    if (errors[k])
+      setErrors((es) => {
+        const nx = { ...es }
+        delete nx[k]
+        return nx
       })
+  }
+
+  /* The address and the message stay selectable if the clipboard is refused */
+  const copy = async (what: 'email' | 'message') => {
+    const text = what === 'email' ? id.email : `To: ${id.email}\nSubject: ${form.subject}\n\n${signed()}`
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopied(what)
+      setTimeout(() => setCopied(''), 1800)
+    } catch {
+      if (what === 'message') {
+        ;(document.getElementById('f-message') as HTMLTextAreaElement).select()
+        return
+      }
+      const range = document.createRange()
+      range.selectNodeContents(mailRef.current!)
+      const sel = window.getSelection()!
+      sel.removeAllRanges()
+      sel.addRange(range)
     }
   }
+
+  const input = (k: FieldKey) => ({
+    id: `f-${k}`,
+    className: 'input',
+    value: form[k],
+    onChange: (e: { target: { value: string } }) => update(k, e.target.value),
+    'aria-invalid': errors[k] ? true : undefined,
+    'aria-describedby': errors[k] ? `f-${k}-err` : undefined,
+  })
+
+  const note = {
+    idle: CAN_SEND ? 'Goes straight to my inbox.' : 'Opens your email app with the message pre-filled.',
+    sending: 'Sending…',
+    sent: "Thanks, your message is on its way. I'll get back to you soon.",
+    opened: `Your email app should open with this message. If it doesn't, copy the message and send it to ${id.email}.`,
+  }[status]
 
   return (
-    <>
-      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
-
-      <section id="contact" className="relative">
-        <div className="absolute inset-0 w-full h-full object-cover">
-          <img src={gridImg} alt="" />
+    <section id="contact" className="contact invert">
+      <div className="wrap">
+        <div className="sbar">
+          <span>
+            <b>05</b> / Contact
+          </span>
+          <span>Open to full-time opportunities</span>
         </div>
-
-        <div
-          ref={sectionRef}
-          className="fade-in-section section-container max-lg:px-6 max-md:px-4 py-20 max-lg:py-10 max-md:py-6"
-        >
-          <div className="flex flex-col items-center gap-6">
-            <div className="flex flex-col items-center gap-2">
-              <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 bg-text-muted" />
-                <p className="text-lg max-md:text-base font-medium text-text-muted leading-[26px] max-md:leading-6">GET IN TOUCH</p>
+        <h2 className="contact__title">
+          <Words text="Let's build something together." />
+        </h2>
+        <div className="contact__grid">
+          <div className="contact__lead">
+            <dl className="kv kv--lg">
+              <div>
+                <dt>email</dt>
+                <dd className="kv__mail">
+                  <a ref={mailRef} href={`mailto:${id.email}`}>
+                    {id.email}
+                  </a>
+                  <button type="button" className="copybtn" onClick={() => copy('email')} aria-label="Copy email address">
+                    <Icon name={copied === 'email' ? 'check' : 'copy'} size={12} />
+                    <span aria-live="polite">{copied === 'email' ? 'Copied' : 'Copy'}</span>
+                  </button>
+                </dd>
               </div>
-              <h2 className="text-[48px] max-md:text-[30px] font-bold leading-[58px] max-md:leading-[38px] text-center">
-                <span className="text-dark">LET'S WORK </span>
-                <span className="gradient-text">TOGETHER</span>
-              </h2>
-            </div>
-
-            <div className="text-base max-md:text-sm font-medium max-md:font-normal text-text-body leading-6 max-md:leading-[22px] text-center">
-              <p>I'm available for full-time roles & freelance projects.</p>
-              <p>My inbox is always open, whether you have a question or just want to say hi.</p>
-              <p>I'll try my best to get back to you!</p>
-            </div>
-
-            <form
-              onSubmit={handleSubmit}
-              noValidate
-              className="w-full max-w-2xl bg-white rounded-[40px] max-md:rounded-[24px] border border-gray-border p-4 flex flex-col gap-4"
-            >
-              <div className="flex gap-4 max-md:flex-col">
-                <div className="flex-1 flex flex-col gap-2">
-                  <label className="text-sm font-medium text-dark leading-[22px]">Your Name</label>
-                  <div className={`rounded-2xl border ${errors.name ? 'border-red-400' : 'border-gray-border'}`}>
-                    <input
-                      type="text"
-                      value={formData.name}
-                      onChange={(e) => handleChange('name', e.target.value)}
-                      placeholder="Your Name..."
-                      className="w-full p-3 text-xs text-text-muted leading-5 outline-none bg-transparent placeholder:text-text-muted/40"
-                    />
-                  </div>
-                  {errors.name && <p className="text-xs text-red-400 leading-4">{errors.name}</p>}
-                </div>
-                <div className="flex-1 flex flex-col gap-2">
-                  <label className="text-sm font-medium text-dark leading-[22px]">Your Email</label>
-                  <div className={`rounded-2xl border ${errors.email ? 'border-red-400' : 'border-gray-border'}`}>
-                    <input
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => handleChange('email', e.target.value)}
-                      placeholder="Name@example.com"
-                      className="w-full p-3 text-xs text-text-muted leading-5 outline-none bg-transparent placeholder:text-text-muted/40"
-                    />
-                  </div>
-                  {errors.email && <p className="text-xs text-red-400 leading-4">{errors.email}</p>}
-                </div>
+              <div>
+                <dt>phone</dt>
+                <dd>
+                  <a href={telHref(id.phone)}>{id.phone}</a>
+                </dd>
               </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-dark leading-[22px]">Subject</label>
-                <div className={`rounded-2xl border ${errors.subject ? 'border-red-400' : 'border-gray-border'}`}>
-                  <input
-                    type="text"
-                    value={formData.subject}
-                    onChange={(e) => handleChange('subject', e.target.value)}
-                    placeholder="Project inquiry..."
-                    className="w-full p-3 text-xs text-text-muted leading-5 outline-none bg-transparent placeholder:text-text-muted/40"
-                  />
-                </div>
-                {errors.subject && <p className="text-xs text-red-400 leading-4">{errors.subject}</p>}
+              <div>
+                <dt>linkedin</dt>
+                <dd>
+                  <a className="tlink" href={D.social.linkedin} target="_blank" rel="noopener noreferrer">
+                    {handle(D.social.linkedin)}
+                    <Icon name="arrow-up-right" size={12} />
+                  </a>
+                </dd>
               </div>
-
-              <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-dark leading-[22px]">Message</label>
-                <div className={`h-40 rounded-2xl border ${errors.message ? 'border-red-400' : 'border-gray-border'}`}>
-                  <textarea
-                    value={formData.message}
-                    onChange={(e) => handleChange('message', e.target.value)}
-                    placeholder="Hello, I'm interested in discussing a project..."
-                    className="w-full h-full p-3 text-xs text-text-muted leading-5 outline-none bg-transparent resize-none placeholder:text-text-muted/40"
-                  />
-                </div>
-                {errors.message && <p className="text-xs text-red-400 leading-4">{errors.message}</p>}
+              <div>
+                <dt>github</dt>
+                <dd>
+                  <a className="tlink" href={D.social.github} target="_blank" rel="noopener noreferrer">
+                    {handle(D.social.github)}
+                    <Icon name="arrow-up-right" size={12} />
+                  </a>
+                </dd>
               </div>
-
-              <div className="flex justify-end">
-                <button
-                  type="submit"
-                  disabled={sending}
-                  className="gradient-bg text-white font-medium text-base w-[200px] max-md:w-full h-14 rounded flex items-center justify-center gap-2 leading-6 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-                >
-                  {sending ? (
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  ) : (
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20">
-                      <path d="M3 5L10 10L17 5M3 15H17V5H3V15Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  )}
-                  {sending ? 'Sending...' : 'Contact Me'}
-                </button>
-              </div>
-            </form>
+            </dl>
           </div>
+          <form className="form" onSubmit={submit} noValidate aria-label="Contact form">
+            <div className="form__row">
+              <ContactField k="name" label="Name" error={errors.name}>
+                <input {...input('name')} autoComplete="name" placeholder="Jane Doe" />
+              </ContactField>
+              <ContactField k="email" label="Email" error={errors.email}>
+                <input {...input('email')} type="email" autoComplete="email" placeholder="jane@company.com" />
+              </ContactField>
+            </div>
+            <ContactField k="subject" label="Subject" error={errors.subject}>
+              <input {...input('subject')} placeholder="Software engineer role" />
+            </ContactField>
+            <ContactField k="message" label="Message" error={errors.message}>
+              <textarea {...input('message')} rows={5} placeholder="A few lines about the role or project…"></textarea>
+            </ContactField>
+            <div className="form__foot">
+              <button type="submit" className={`btn btn--solid${attempts ? ' is-sent' : ''}`} disabled={status === 'sending'}>
+                Send message
+                <Icon key={attempts} name="arrow-right" size={15} />
+              </button>
+              <div className="form__status">
+                <p className="form__note" role="status">
+                  {note}
+                </p>
+                {status === 'opened' && (
+                  <button type="button" className="tlink" onClick={() => copy('message')}>
+                    {copied === 'message' ? 'Copied' : 'Copy message'}
+                  </button>
+                )}
+              </div>
+            </div>
+          </form>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   )
 }

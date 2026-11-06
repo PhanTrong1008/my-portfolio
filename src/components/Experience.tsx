@@ -1,78 +1,91 @@
-import { useScrollAnimation } from '../hooks/useScrollAnimation'
-import ritaLogo from '../assets/images/rita_logo.png'
-import zdnLogo from '../assets/images/zdn_logo.png'
+import type { CSSProperties, MouseEvent } from 'react'
+import { D, type Role } from '../data/portfolio'
+import { MONTHS, fmtDuration, monthsOf, parsePeriod } from '../data/period'
+import { Pic, SectionHead, Words } from './common'
 
-const experiences = [
-  {
-    company: 'RitaVõ',
-    role: 'Fullstack Developer',
-    period: 'June 2025 – April 2026',
-    description:
-      'Developed frontend features with Vue.js, implementing pixel-perfect UI from Figma and ensuring high performance. Built RESTful APIs and scalable backend services using Node.js and Express.js for task, project, and member management with RBAC. Implemented a real-time group chat module and collaborated with cross-functional teams to deliver features in an Agile/Scrum environment.',
-    logo: ritaLogo,
-  },
-  {
-    company: 'Zodinet',
-    role: 'Fullstack Developer',
-    period: 'February 2023 – January 2025',
-    description:
-      'Developed UI with Angular and maintained system features for stability, while building RESTful APIs using .NET, NestJS, and Node.js. Contributed to code reviews, coordinated team tasks during sprints, and collaborated with frontend developers to integrate APIs and deliver a seamless user experience.',
-    logo: zdnLogo,
-  },
-]
-
-export default function Experience() {
-  const sectionRef = useScrollAnimation()
-
+/* One timeline per employer, at one width per month for every company, so they compare across jobs.
+   An employer with stages shows them as segments of that same bar, with a row for each below it.
+   What was done on each project lives in the Projects section. */
+function RoleTimeline({ role, longest }: { role: Role; longest: number }) {
+  const t = parsePeriod(role.period)
+  const pct = (months: number) => `${(months / t.months) * 100}%`
+  /* Reads off the month under the pointer, snapped to the middle of that month */
+  const scrub = (e: MouseEvent<HTMLDivElement>) => {
+    const el = e.currentTarget
+    const r = el.getBoundingClientRect()
+    const i = Math.max(0, Math.min(t.months - 1, Math.floor(((e.clientX - r.left) / r.width) * t.months)))
+    const mo = t.start.m + i
+    el.style.setProperty('--x', `${((i + 0.5) / t.months) * r.width}px`)
+    el.querySelector('.tl__tip')!.textContent = `${MONTHS[mo % 12]} ${t.start.y + Math.floor(mo / 12)}`
+  }
+  const segments: { period: string; key?: string }[] = role.stages ?? [role]
   return (
-    <section className="relative bg-white py-20 max-md:py-6">
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="section-container max-lg:px-6 max-md:px-4">
-          <p className="bg-text-watermark text-[120px] max-md:text-[64px] font-black text-center leading-normal mt-10 max-md:mt-6">Experience</p>
+    <div className="tl" style={{ '--scale': `${(monthsOf(role) / longest) * 100}%` } as CSSProperties}>
+      <div className="tl__axis">
+        <div className="tl__scale tl__track" aria-hidden="true" onMouseMove={scrub}>
+          {segments.map((s) => {
+            const d = parsePeriod(s.period)
+            const offset = (d.start.y - t.start.y) * 12 + (d.start.m - t.start.m)
+            const cls = [d.end.open && 'is-open', s.key && `is-${s.key}`].filter(Boolean).join(' ')
+            return <b key={s.period} className={cls || undefined} style={{ left: pct(offset), width: pct(d.months) }}></b>
+          })}
+          <span className="tl__tip"></span>
         </div>
       </div>
-
-      <div ref={sectionRef} className="fade-in-section section-container max-lg:px-6 max-md:px-4 flex flex-col items-center gap-10 max-md:gap-6 relative">
-        <div className="flex flex-col items-center gap-2">
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 bg-text-muted" />
-            <p className="text-lg max-md:text-base font-medium text-text-muted leading-[26px] max-md:leading-6">MY PROFESSIONAL JOURNEY</p>
+      {role.stages?.map((s) => (
+        <div key={s.key} className="tl__group">
+          <div className="tl__line">
+            <div className="tl__name">
+              <i className={`tl__key is-${s.key}`} aria-hidden="true"></i>
+              <h4>{s.role}</h4>
+              <span>{s.type}</span>
+            </div>
+            <div className="tl__when">
+              <b>{s.period}</b>
+              <span>{fmtDuration(monthsOf(s))}</span>
+            </div>
           </div>
-          <h2 className="text-[48px] max-md:text-[30px] font-bold text-dark leading-[58px] max-md:leading-[38px] text-center">Experience</h2>
         </div>
+      ))}
+    </div>
+  )
+}
 
-        <div className="flex flex-col gap-10 max-md:gap-6 w-full">
-          {experiences.map((exp, idx) => (
-            <div
-              key={idx}
-              className="group bg-white rounded-[40px] max-md:rounded-2xl border border-gray-border max-lg:border-primary p-10 max-md:p-4 overflow-hidden transition-all duration-200 ease-out lg:hover:border-primary cursor-default"
-            >
-              <div className="flex flex-col gap-6 max-md:gap-4">
-                <div className="flex items-center justify-between">
-                  <div className="h-12 max-md:h-10 flex items-center">
-                    <img
-                      src={exp.logo}
-                      alt={exp.company}
-                      className="h-12 max-md:h-10 w-auto object-contain transition-all duration-200 ease-out lg:grayscale lg:brightness-75 lg:group-hover:grayscale-0 lg:group-hover:brightness-100"
-                    />
+export default function Experience() {
+  const longest = Math.max(...D.experience.map(monthsOf))
+  return (
+    <section id="experience" className="section">
+      <div className="wrap">
+        <SectionHead index="01" label="Experience" title="Where I've worked." />
+        <ol className="roles">
+          {D.experience.map((e, i) => {
+            const months = monthsOf(e)
+            return (
+              <li key={e.company} className="role">
+                <div className="role__top">
+                  <div className="role__name">
+                    <div className="role__id">01.{i + 1}</div>
+                    <h3 className="role__co">
+                      <Words text={e.company} />
+                    </h3>
+                    <div className="role__title">{e.role}</div>
                   </div>
-                  <div className="flex flex-col items-end">
-                    <p className="text-sm font-normal leading-[22px] text-text-muted max-lg:text-dark transition-colors duration-200 ease-out lg:group-hover:text-dark">
-                      {exp.role}
-                    </p>
-                    <p className="text-sm font-medium leading-[22px] text-primary-mid">
-                      {exp.period}
-                    </p>
+                  <div className="role__when">
+                    <Pic src={e.logo} className="role__logo" />
+                    <div className="role__period">
+                      {e.period}
+                      <span data-months={months}>{fmtDuration(months)}</span>
+                    </div>
+                    <div className="role__sub">
+                      {e.workMode}, {e.location}
+                    </div>
                   </div>
                 </div>
-
-                <p className="text-base max-md:text-sm font-normal leading-6 max-md:leading-[22px] text-text-muted max-lg:text-dark transition-colors duration-200 ease-out lg:group-hover:text-dark">
-                  {exp.description}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+                <RoleTimeline role={e} longest={longest} />
+              </li>
+            )
+          })}
+        </ol>
       </div>
     </section>
   )

@@ -1,60 +1,124 @@
-import { useState, useEffect } from 'react'
-import cvFile from '../assets/PhanNguyenDucTrong_CV.pdf'
-import logoTP from '../../public/tp_logo.png';
-import downloadIcon from '../assets/images/download.png';
+import { Fragment, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react'
+import { D } from '../data/portfolio'
+import { useActiveSection, useScrolled } from '../hooks/usePortfolio'
+import { Icon, Logo, ResumeButton } from './common'
 
-const navLinks = [
-  { label: 'About', href: '#about' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Contact', href: '#contact' },
+const NAV_ITEMS = [
+  { id: 'experience', label: 'Experience' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'about', label: 'About' },
+  { id: 'contact', label: 'Contact' },
 ]
+const NAV_IDS = NAV_ITEMS.map((i) => i.id)
 
-export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
+export default function Navbar({ theme, onToggleTheme }: { theme: string; onToggleTheme: (ev: MouseEvent<HTMLButtonElement>) => void }) {
+  const scrolled = useScrolled()
+  const active = useActiveSection(NAV_IDS)
+  const [menu, setMenu] = useState(false)
+  const listRef = useRef<HTMLElement>(null)
+  const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
+  const [ind, setInd] = useState({ x: 0, w: 0, on: false, ready: false })
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const el = linkRefs.current[active]
+      const c = listRef.current
+      if (!el || !c || !c.offsetParent) {
+        setInd((s) => ({ ...s, on: false }))
+        return
+      }
+      const r = el.getBoundingClientRect()
+      const cr = c.getBoundingClientRect()
+      setInd((s) => ({ x: r.left - cr.left, w: r.width, on: true, ready: s.ready || s.on }))
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    document.fonts.ready.then(measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [active])
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50)
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+    if (!menu) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenu(false)
+    }
+    const onResize = () => {
+      if (window.innerWidth > 960) setMenu(false)
+    }
+    window.addEventListener('keydown', onKey)
+    window.addEventListener('resize', onResize)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      window.removeEventListener('resize', onResize)
+    }
+  }, [menu])
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white ${scrolled ? 'shadow-[0_1px_0_#dfe4ea]' : 'border-b border-gray-border'
-        }`}
-    >
-      <div className="section-container max-lg:px-6 max-md:px-3.5 py-6 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-1">
-          <div className="content-stretch flex gap-[5.6px] items-center max-w-[931px] relative shrink-0" data-name="logo">
-            <div className="h-[56px] relative shrink-0 w-[37.07px]" data-name="logo 2">
-              <img alt="" className="absolute inset-0 max-w-none object-cover pointer-events-none size-full" src={logoTP} />
-            </div>
-            <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold leading-[56px] not-italic relative shrink-0 text-[#111928] text-[39.2px] whitespace-nowrap max-lg:hidden">ortfolio</p>
-          </div>
-        </a>
-
-        <div className="flex items-center gap-4">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="px-4 py-2 text-lg font-normal text-dark rounded-lg hover:bg-[#f0f5ff] hover:text-primary-mid transition-colors leading-[26px]"
+    <Fragment>
+      <header className={`nav${scrolled || menu ? ' is-scrolled' : ''}`}>
+        <div className="wrap nav__in">
+          <a href="#top" className="brand" aria-label={`${D.identity.name}, back to top`}>
+            <Logo className="brand__mark" />
+            <span className="brand__text">
+              <span className="brand__name">{D.identity.name}</span>
+              <span className="brand__role">{D.identity.role}</span>
+            </span>
+          </a>
+          <div className="nav__right">
+            <nav ref={listRef} className="navlinks" aria-label="Primary">
+              <span
+                aria-hidden="true"
+                className={`navlinks__ind${ind.ready ? ' is-ready' : ''}`}
+                style={{ transform: `translateX(${ind.x}px)`, width: ind.w, opacity: ind.on ? 1 : 0 }}
+              ></span>
+              {NAV_ITEMS.map((it) => (
+                <a
+                  key={it.id}
+                  href={`#${it.id}`}
+                  ref={(el) => {
+                    linkRefs.current[it.id] = el
+                  }}
+                  className={`navlink${active === it.id ? ' is-active' : ''}`}
+                  aria-current={active === it.id ? 'true' : undefined}
+                >
+                  {it.label}
+                </a>
+              ))}
+            </nav>
+            <ResumeButton />
+            <button
+              type="button"
+              className="iconbtn"
+              onClick={onToggleTheme}
+              aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
             >
-              {link.label}
+              <Icon key={theme} name={theme === 'dark' ? 'sun' : 'moon'} size={15} />
+            </button>
+            <button
+              type="button"
+              className="iconbtn nav__menu"
+              onClick={() => setMenu((m) => !m)}
+              aria-expanded={menu}
+              aria-controls="mobile-menu"
+              aria-label={menu ? 'Close menu' : 'Open menu'}
+            >
+              <Icon name={menu ? 'close' : 'menu'} size={15} />
+            </button>
+          </div>
+        </div>
+        <i className="nav__prog" aria-hidden="true"></i>
+      </header>
+      {menu && (
+        <nav id="mobile-menu" className="sheet" aria-label="Mobile">
+          {NAV_ITEMS.map((it, i) => (
+            <a key={it.id} href={`#${it.id}`} style={{ '--i': i } as CSSProperties} onClick={() => setMenu(false)}>
+              <span className="sheet__n">0{i + 1}</span>
+              {it.label}
             </a>
           ))}
-        </div>
-
-        <a
-          href={cvFile}
-          download="PhanNguyenDucTrong_CV.pdf"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded border border-primary"
-        >
-          <img className='w-5 h-5' src={downloadIcon} alt="Download" />
-          <span className="gradient-text font-medium text-base leading-6">My Resumé</span>
-        </a>
-      </div>
-    </nav>
+        </nav>
+      )}
+    </Fragment>
   )
 }

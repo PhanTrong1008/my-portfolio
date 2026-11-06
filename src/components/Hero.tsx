@@ -1,79 +1,75 @@
-import { FollowMe } from './Footer'
-import { TechTag } from './Skills'
-import cvFile from '../assets/PhanNguyenDucTrong_CV.pdf'
-import logoJs from '../assets/images/logo_js.png'
-import logoTs from '../assets/images/logo_ts.png'
-import logoAngular from '../assets/images/logo_angular.png'
-import rocketIcon from '../assets/images/rocket.png';
-import downloadIcon from '../assets/images/download.png';
-
-const techTags = [
-  { name: 'Javascript', imageSrc: logoJs },
-  { name: 'Typescript', imageSrc: logoTs },
-  { name: 'Angular', imageSrc: logoAngular },
-]
+import { D } from '../data/portfolio'
+import { useClock } from '../hooks/usePortfolio'
+import { Icon, Pic, Words } from './common'
 
 export default function Hero() {
+  const id = D.identity
+  const time = useClock()
   return (
-    <section id="hero" className="relative h-[1024px] max-md:h-auto max-md:pt-10 flex items-center overflow-hidden">
-      <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover">
-        <source src="/video_portfolio.mp4" type="video/mp4" />
-      </video>
-
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: 'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 27.73%)' }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-white via-white/70 to-transparent pointer-events-none" />
-
-      <div className="relative z-10 section-container max-lg:px-10 max-md:px-4 w-full">
-        <div className="flex flex-col items-center gap-10 max-md:gap-6 text-center">
-          <div className="flex flex-col items-center gap-2 max-md:w-full">
-            <p className="text-lg font-medium text-text-muted leading-[26px]">Welcome to my site.</p>
-
-            <div className="flex flex-col items-center gap-4 max-md:gap-2 max-md:w-full">
-              <div className="flex flex-col items-center gap-2 max-md:gap-1 text-[60px] max-md:text-[40px] font-bold leading-[1.2]">
-                <div className="flex items-start gap-2 flex-wrap justify-center">
-                  <span className="text-dark">I'm</span>
-                  <span>
-                    <span className="gradient-text">Trọng Phan</span>
-                    <span className="text-dark">,</span>
-                  </span>
+    <section id="top" className="hero band">
+      <div className="wrap">
+        <div className="hero__in">
+          <div className="hero__meta">
+            <span className="status">
+              <span className="status__dot" aria-hidden="true"></span>Open to full-time opportunities
+            </span>
+            <span className="hero__place">{id.location}</span>
+            <span className="hero__time">
+              {time} {id.timezone}
+            </span>
+            <span className="hero__links">
+              <a className="tlink" href={D.social.linkedin} target="_blank" rel="noopener noreferrer">
+                LinkedIn
+                <Icon name="arrow-up-right" size={12} />
+              </a>
+              <a className="tlink" href={D.social.github} target="_blank" rel="noopener noreferrer">
+                GitHub
+                <Icon name="arrow-up-right" size={12} />
+              </a>
+            </span>
+          </div>
+          <div className="hero__main">
+            <div className="hero__cols">
+              <div className="hero__lead">
+                <p className="hero__eyebrow">
+                  {id.role} · {id.location}
+                </p>
+                <h1 className="hero__title">
+                  <Words text={id.name} />
+                </h1>
+                <p className="hero__intro">
+                  I build scalable web applications and B2B SaaS platforms, from pixel-perfect interfaces to the APIs behind them.
+                </p>
+                <div className="hero__actions">
+                  <a href="#projects" className="btn btn--solid">
+                    View Projects
+                    <Icon name="arrow-down" size={15} />
+                  </a>
+                  <a href="#contact" className="btn btn--line">
+                    Contact Me
+                    <Icon name="arrow-up-right" size={15} />
+                  </a>
                 </div>
-                <span className="text-dark">Software Engineer.</span>
               </div>
-
-              <div className="flex items-center gap-4 max-md:gap-x-4 max-md:gap-y-1 flex-wrap justify-center">
-                {techTags.map((tag) => (
-                  <TechTag key={tag.name} name={tag.name} imageSrc={tag.imageSrc} />
-                ))}
-                <div className="flex items-center gap-1 p-2 cursor-pointer">
-                  <span className="text-sm font-normal text-text-light">...more</span>
-                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24">
-                    <path d="M9 5L16 12L9 19" stroke="#9CA3AF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </div>
-              </div>
+              <figure className="hero__photo">
+                <Pic src={id.portrait} alt={`Portrait of ${id.name}`} width="880" height="1100" />
+              </figure>
             </div>
+            <dl className="hero__facts">
+              <div>
+                <dt>Experience</dt>
+                <dd>{id.years}+ years</dd>
+              </div>
+              <div>
+                <dt>Stack</dt>
+                <dd>React, Angular, Vue.js, Node.js, .NET, PostgreSQL, AWS</dd>
+              </div>
+              <div>
+                <dt>Work Authorization</dt>
+                <dd>{id.workAuth}</dd>
+              </div>
+            </dl>
           </div>
-
-          <p className="text-base font-normal text-dark leading-6 max-w-[770px]">
-            Hello and welcome to my portfolio. I’m passionate about building modern, scalable, and user-friendly web applications that combine clean design with powerful functionality.
-          </p>
-
-          <div className="flex items-start gap-4 flex-wrap justify-center max-md:flex-col max-md:gap-3 max-md:w-full">
-            <a href="#contact" className="gradient-bg text-white font-medium text-base px-6 py-3 rounded flex items-center gap-2 leading-6 max-md:w-full max-md:justify-center">
-              <img className='w-5 h-5' src={rocketIcon} alt="Get Started" />
-              Get Started
-            </a>
-            <a href={cvFile} download="PhanNguyenDucTrong_CV.pdf" className="border border-primary rounded px-6 py-3 flex items-center gap-2 leading-6 max-md:w-full max-md:justify-center">
-              <img className='w-5 h-5' src={downloadIcon} alt="Download" />
-              <span className="gradient-text font-medium">My Resumé</span>
-            </a>
-          </div>
-
-          {/* Follow me */}
-          <FollowMe />
         </div>
       </div>
     </section>
